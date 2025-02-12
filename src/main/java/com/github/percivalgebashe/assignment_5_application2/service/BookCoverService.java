@@ -1,7 +1,7 @@
 package com.github.percivalgebashe.assignment_5_application2.service;
 
-import com.github.percivalgebashe.assignment_5.entity.BookCover;
-import com.github.percivalgebashe.assignment_5.repository.BookCoverRepository;
+import com.github.percivalgebashe.assignment_5_application2.entity.BookCover;
+import com.github.percivalgebashe.assignment_5_application2.repository.BookCoverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

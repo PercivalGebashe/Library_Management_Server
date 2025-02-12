@@ -1,7 +1,7 @@
 package com.github.percivalgebashe.assignment_5_application2.controller;
 
-import com.github.percivalgebashe.assignment_5.entity.BookCover;
-import com.github.percivalgebashe.assignment_5.service.BookCoverService;
+import com.github.percivalgebashe.assignment_5_application2.entity.BookCover;
+import com.github.percivalgebashe.assignment_5_application2.service.BookCoverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

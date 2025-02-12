@@ -29,7 +29,7 @@ public class BookDTO {
 
     public Book toBookEntity() {
         Book book = new Book();
-        book.setId(book_id);
+        book.setBook_id(book_id);
         book.setAuthors(authors);
         book.setTitle(title);
         book.setPublishedDate(publishedDate);

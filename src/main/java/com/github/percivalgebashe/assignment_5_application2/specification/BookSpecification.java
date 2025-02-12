@@ -1,7 +1,7 @@
 package com.github.percivalgebashe.assignment_5_application2.specification;
 
-import com.github.percivalgebashe.assignment_5.dto.BookFilterDTO;
-import com.github.percivalgebashe.assignment_5.entity.Book;
+import com.github.percivalgebashe.assignment_5_application2.dto.BookFilterDTO;
+import com.github.percivalgebashe.assignment_5_application2.entity.Book;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 

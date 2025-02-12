@@ -1,11 +1,11 @@
 package com.github.percivalgebashe.assignment_5_application2.service;
 
-import com.github.percivalgebashe.assignment_5.dto.BookDTO;
-import com.github.percivalgebashe.assignment_5.dto.BookFilterDTO;
-import com.github.percivalgebashe.assignment_5.entity.Book;
-import com.github.percivalgebashe.assignment_5.exception.ResourceNotFoundException;
-import com.github.percivalgebashe.assignment_5.repository.BookRepository;
-import com.github.percivalgebashe.assignment_5.specification.BookSpecification;
+import com.github.percivalgebashe.assignment_5_application2.dto.BookDTO;
+import com.github.percivalgebashe.assignment_5_application2.dto.BookFilterDTO;
+import com.github.percivalgebashe.assignment_5_application2.entity.Book;
+import com.github.percivalgebashe.assignment_5_application2.exception.ResourceNotFoundException;
+import com.github.percivalgebashe.assignment_5_application2.repository.BookRepository;
+import com.github.percivalgebashe.assignment_5_application2.specification.BookSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
