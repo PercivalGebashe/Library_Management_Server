@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
-@Table(name = "book_genres")
+@Table(name = "genres")
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter @Getter
@@ -21,4 +22,7 @@ public class Genre implements Serializable {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @ManyToMany(mappedBy = "genres")
+    private List<Book> books;
 }

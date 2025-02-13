@@ -1,4 +1,4 @@
-package com.github.percivalgebashe.assignment_5_application2.entity.;
+package com.github.percivalgebashe.assignment_5_application2.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,9 +7,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "book_publishers")
+@Table(name = "publishers")
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter @Getter
@@ -21,4 +23,7 @@ public class Publisher implements Serializable {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @ManyToMany(mappedBy = "publishers")
+    private List<Book> books;
 }

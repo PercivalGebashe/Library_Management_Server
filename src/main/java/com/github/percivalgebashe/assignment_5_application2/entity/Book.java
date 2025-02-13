@@ -1,15 +1,15 @@
 package com.github.percivalgebashe.assignment_5_application2.entity;
 
 import jakarta.persistence.*;
-
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "book")
+@Table(name = "books")
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -18,17 +18,16 @@ public class Book implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long book_id;
+    private Long id;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Author> authors;
+    @ManyToMany(mappedBy = "books")
+    private List<Author> authors;
 
     @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date publishedDate;
+    private LocalDate publishedDate; // Removed @Temporal
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
@@ -38,17 +37,14 @@ public class Book implements Serializable {
 
     @ManyToMany
     @JoinTable(
-            name = "book_genres",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id")
+            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id")
     )
     private Set<Genre> genres;
 
     @ManyToMany
     @JoinTable(
-            name = "book_publishers",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "publisher_id")
-    )
+            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "publisher_id", referencedColumnName = "id"))
     private Set<Publisher> publishers;
 }

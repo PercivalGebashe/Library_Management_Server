@@ -19,4 +19,13 @@ public class ApiExceptionHandler {
                 ex.getMessage(),
                 "Resource Not Found");
     }
+
+    @ExceptionHandler(value = BadRequestException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorMessage badRequest(BadRequestException ex) {
+        return new ErrorMessage(HttpStatus.BAD_REQUEST.value(),
+                new Date(),
+                ex.getMessage(),
+                "Bad Request");
+    }
 }

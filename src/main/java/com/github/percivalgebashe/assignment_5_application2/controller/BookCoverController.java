@@ -1,7 +1,7 @@
 package com.github.percivalgebashe.assignment_5_application2.controller;
 
 import com.github.percivalgebashe.assignment_5_application2.entity.BookCover;
-import com.github.percivalgebashe.assignment_5_application2.service.BookCoverService;
+import com.github.percivalgebashe.assignment_5_application2.service.impl.BookCoverServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ import java.util.Optional;
 public class BookCoverController {
 
     @Autowired
-    private BookCoverService bookCoverService;
+    private BookCoverServiceImpl bookCoverService;
 
     @GetMapping("/{id}")
     public ResponseEntity<BookCover> getBookCover(@PathVariable("id") Long id) {

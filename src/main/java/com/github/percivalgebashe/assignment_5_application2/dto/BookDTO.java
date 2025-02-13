@@ -6,18 +6,20 @@ import com.github.percivalgebashe.assignment_5_application2.entity.Genre;
 import com.github.percivalgebashe.assignment_5_application2.entity.Publisher;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Data
 public class BookDTO {
     private Long book_id;
 
-    private Set<Author> authors;
+    private List<Author> authors;
 
     private String title;
 
-    private Date publishedDate;
+    private LocalDate publishedDate;
 
     private Set<Publisher> publishers;
 
@@ -29,7 +31,7 @@ public class BookDTO {
 
     public Book toBookEntity() {
         Book book = new Book();
-        book.setBook_id(book_id);
+        book.setId(book_id);
         book.setAuthors(authors);
         book.setTitle(title);
         book.setPublishedDate(publishedDate);

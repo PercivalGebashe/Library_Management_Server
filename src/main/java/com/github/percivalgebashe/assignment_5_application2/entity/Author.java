@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "authors")
@@ -22,4 +23,11 @@ public class Author implements Serializable {
 
     @Column(nullable = false)
     private String name;
+
+    @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id")
+    )
+    private List<Book> books;
 }
