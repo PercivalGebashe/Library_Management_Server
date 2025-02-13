@@ -4,6 +4,7 @@ import com.github.percivalgebashe.assignment_5_application2.dto.BookDTO;
 import com.github.percivalgebashe.assignment_5_application2.dto.BookFilterDTO;
 import com.github.percivalgebashe.assignment_5_application2.entity.Book;
 import com.github.percivalgebashe.assignment_5_application2.exception.BadRequestException;
+import com.github.percivalgebashe.assignment_5_application2.exception.NoContentFoundException;
 import com.github.percivalgebashe.assignment_5_application2.exception.ResourceNotFoundException;
 import com.github.percivalgebashe.assignment_5_application2.service.BookService;
 import com.github.percivalgebashe.assignment_5_application2.service.impl.BookServiceImpl;
@@ -13,8 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/books")
@@ -35,51 +34,38 @@ public class BookController {
     @GetMapping({"/id"})
     public ResponseEntity<Book> getBookById(@RequestParam Long id) {
         try {
-            Optional<Book> book = bookService.findById(id);
-            return book.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+            return new ResponseEntity<>(bookService.findById(id), HttpStatus.OK);
         }catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping("/filter")
-    public Page<Book> getBooksFilter(@RequestBody BookFilterDTO filter, Pageable pageable) {
-        return bookService.findBookByFilter(filter, pageable);
+    public ResponseEntity<Page<Book>> getBooksFilter(@RequestBody BookFilterDTO filter, Pageable pageable) {
+        try {
+            return new ResponseEntity<>(bookService.findBookByFilter(filter, pageable), HttpStatus.OK);
+        }catch (NoContentFoundException e){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 
     @PostMapping
     public ResponseEntity<Book> addBook(@RequestBody BookDTO book) {
         try {
-            Optional<Book> bookEntity = bookService.save(book);
-            return bookEntity.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED))
-                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+            return new ResponseEntity<>(bookService.save(book), HttpStatus.CREATED);
         }catch (BadRequestException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping(value = "/edit", consumes = "application/json")
     public ResponseEntity<Book> editBook(@RequestBody BookDTO bookDTO) {
         try {
-            Optional<Book> updatedBook = bookService.updateBook(bookDTO);
-            return new ResponseEntity<>(updatedBook.get(), HttpStatus.OK);
+            return new ResponseEntity<>(bookService.updateBook(bookDTO), HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
-            // TODO: return response entity with error msg
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }catch (BadRequestException e){
-            // TODO: return response entity with error msg
-        }
-    }
-
-    @PutMapping(value = "/edit", consumes = "application/json")
-    public ResponseEntity<Book> editBook(@RequestBody BookDTO bookDTO) {
-        try {
-            Optional<Book> updatedBook = bookService.updateBook(bookDTO);
-            return new ResponseEntity<>(updatedBook.get(), HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
-            // TODO: return response entity with error msg
-        }catch (BadRequestException e){
-            // TODO: return response entity with error msg
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

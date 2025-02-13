@@ -28,4 +28,13 @@ public class ApiExceptionHandler {
                 ex.getMessage(),
                 "Bad Request");
     }
+
+    @ExceptionHandler(value = NoContentFoundException.class)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public ErrorMessage noContentFound(NoContentFoundException ex) {
+        return new ErrorMessage(HttpStatus.NO_CONTENT.value(),
+                new Date(),
+                ex.getMessage(),
+                "No Content Found");
+    }
 }
