@@ -27,8 +27,12 @@ public class BookController {
     }
 
     @GetMapping
-    public Page<Book> getBooks(Pageable pageable) {
-        return bookService.findAll(pageable);
+    public ResponseEntity<Page<Book>> getBooks(Pageable pageable) {
+        try {
+            return new ResponseEntity<>(bookService.findAll(pageable), HttpStatus.OK);
+        }catch (NoContentFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 
     @GetMapping({"/id"})
@@ -45,16 +49,17 @@ public class BookController {
         try {
             return new ResponseEntity<>(bookService.findBookByFilter(filter, pageable), HttpStatus.OK);
         }catch (NoContentFoundException e){
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
     @PostMapping
-    public ResponseEntity<Book> addBook(@RequestBody BookDTO book) {
+    public ResponseEntity<Object> addBook(@RequestBody BookDTO book) {
         try {
             return new ResponseEntity<>(bookService.save(book), HttpStatus.CREATED);
         }catch (BadRequestException e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
