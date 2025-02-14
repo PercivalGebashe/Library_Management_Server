@@ -8,7 +8,7 @@ import com.github.percivalgebashe.assignment_5_application2.exception.NoContentF
 import com.github.percivalgebashe.assignment_5_application2.exception.ResourceNotFoundException;
 import com.github.percivalgebashe.assignment_5_application2.repository.BookRepository;
 import com.github.percivalgebashe.assignment_5_application2.service.BookService;
-import com.github.percivalgebashe.assignment_5_application2.specification.BookSpecification;
+import com.github.percivalgebashe.assignment_5_application2.specification.BookSpecificationBuilder;
 import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class BookServiceImpl implements BookService {
     }
 
     public Page<Book> findBookByFilter(BookFilterDTO filter, Pageable pageable) {
-        Specification<Book> bookSpecification = BookSpecification.filterBooks(filter);
+        Specification<Book> bookSpecification = BookSpecificationBuilder.getBookFilterCriteria(filter);
         Page<Book> page = bookRepository.findAll(bookSpecification, pageable);
         if (page.getSize() == 0){
            throw new NoContentFoundException("No books found");

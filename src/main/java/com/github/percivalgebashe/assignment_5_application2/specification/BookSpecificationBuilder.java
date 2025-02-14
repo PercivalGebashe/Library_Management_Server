@@ -5,9 +5,9 @@ import com.github.percivalgebashe.assignment_5_application2.entity.Book;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
-public class BookSpecification {
+public class BookSpecificationBuilder {
 
-    public static Specification<Book> filterBooks(BookFilterDTO filter) {
+    public static Specification<Book> getBookFilterCriteria(BookFilterDTO filter) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction(); // Always true initially
 
