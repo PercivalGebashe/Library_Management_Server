@@ -37,4 +37,13 @@ public class ApiExceptionHandler {
                 ex.getMessage(),
                 "No Content Found");
     }
+
+    @ExceptionHandler(value = ConflictException.class)
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    public ErrorMessage conflict(ConflictException ex) {
+        return new ErrorMessage(HttpStatus.CONFLICT.value(),
+                new Date(),
+                ex.getMessage(),
+                "Conflict! Resource Already Exists");
+    }
 }
