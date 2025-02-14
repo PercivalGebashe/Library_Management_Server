@@ -74,17 +74,18 @@ mvn spring-boot:run
 | DELETE | `/api/v1/authors/{id}` | Delete an author |
 
 ### ✍️ BookCovers
-| Method | Endpoint          | Description |
-|--------|------------------|-------------|
+| Method | Endpoint                  | Description                                                                             |
+|--------|---------------------------|-----------------------------------------------------------------------------------------|
 | GET    | `/api/v1/book_cover/{id}` | Get Book cover image path by id(there can be multiple book covers for the same book_id) |
-| POST   | `/api/v1/authors`   | Add a new author |
-| PUT    | `/api/v1/book_cover/{id}` | Update a book cover |
-| DELETE | `/api/v1/book_cover/{id}` | Delete a book cover |
+| POST   | `/api/v1/book_cover/`     | Add a new book cover                                                                    |
+| PUT    | `/api/v1/book_cover/{id}` | Update a book cover                                                                     |
+| DELETE | `/api/v1/book_cover/{id}` | Delete a book cover                                                                     |
 
 ## 🛡️ Exception Handling
-- `ResourceNotFoundException` → 404 NOT FOUND
-- `BadRequestException` → 400 BAD REQUEST
 - `NoContentException` → 204 NO CONTENT
+- `BadRequestException` → 400 BAD REQUEST
+- `ResourceNotFoundException` → 404 NOT FOUND
+- `ConflictException` → 409 CONFLICT
 - Custom excepttion error message via `ErrorMessage` class
 - Global exception handling via `ApiExceptionHandler` class
 
