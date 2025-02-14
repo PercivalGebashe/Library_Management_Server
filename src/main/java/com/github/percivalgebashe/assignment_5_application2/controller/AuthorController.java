@@ -1,17 +1,15 @@
 package com.github.percivalgebashe.assignment_5_application2.controller;
 
 import com.github.percivalgebashe.assignment_5_application2.dto.AuthorDTO;
-import com.github.percivalgebashe.assignment_5_application2.entity.Author;
 import com.github.percivalgebashe.assignment_5_application2.exception.BadRequestException;
 import com.github.percivalgebashe.assignment_5_application2.exception.ConflictException;
 import com.github.percivalgebashe.assignment_5_application2.exception.NoContentFoundException;
 import com.github.percivalgebashe.assignment_5_application2.exception.ResourceNotFoundException;
+import com.github.percivalgebashe.assignment_5_application2.service.AuthorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,10 +17,18 @@ import java.util.List;
 @RequestMapping("api/v1/author")
 public class AuthorController {
 
-    @GetMapping
-    public ResponseEntity<Object> getAuthorById(@PathVariable("id") Long id){
-        try {
+    private final AuthorService authorService;
 
+    @Autowired
+    public AuthorController(AuthorService authorService) {
+        this.authorService = authorService;
+    }
+
+
+    @GetMapping
+    public ResponseEntity<Object> getAuthorById(@RequestParam("id") Long id){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(authorService.getAuthorById(id));
         }catch (ResourceNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch (BadRequestException e){
@@ -30,17 +36,23 @@ public class AuthorController {
         }
     }
 
-    public ResponseEntity<Object> getAllAuthors(){
+    @GetMapping(value = "/authors", consumes = "application/json")
+    public ResponseEntity<Object> getAllAuthors(List<Long> authorIds){
         try {
-
+            return ResponseEntity.status(HttpStatus.OK).body(authorService.getAllAuthorsById(authorIds));
         }catch (NoContentFoundException e){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(e.getMessage());
+        }catch (BadRequestException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }catch (ResourceNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
-    public ResponseEntity<Object> addAuthor(Author author){
+    @PostMapping(consumes = "application/json")
+    public ResponseEntity<Object> addAuthor(@RequestBody AuthorDTO authorDTO){
         try {
-
+            return ResponseEntity.status(HttpStatus.OK).body(authorService.addAuthor(authorDTO));
         }catch (BadRequestException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (ConflictException e){
@@ -48,9 +60,10 @@ public class AuthorController {
         }
     }
 
-    public ResponseEntity<Object> updateAuthor(AuthorDTO author){
+    @PutMapping(value = "/update", consumes = "application/json")
+    public ResponseEntity<Object> updateAuthor(@RequestBody AuthorDTO author){
         try {
-
+            return ResponseEntity.status(HttpStatus.OK).body(authorService.updateAuthor(author));
         }catch (BadRequestException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (ResourceNotFoundException e){
@@ -58,9 +71,10 @@ public class AuthorController {
         }
     }
 
+    @PutMapping
     public ResponseEntity<Object> updateAuthors(List<AuthorDTO> authors){
         try {
-
+            return ResponseEntity.status(HttpStatus.OK).body(authorService.updateAuthors(authors));
         }catch (BadRequestException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (ResourceNotFoundException e){

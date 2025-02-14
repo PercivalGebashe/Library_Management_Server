@@ -16,10 +16,17 @@ public class AuthorDTO {
 
     private String name;
 
-    public Author toEntity() {
+    public Author fromDTO() {
         Author author = new Author();
         author.setId(id);
         author.setName(name);
         return author;
+    }
+
+    public static AuthorDTO fromEntity(Author author) {
+        AuthorDTO authorDTO = new AuthorDTO();
+        authorDTO.setId(author.getId());
+        authorDTO.setName(author.getName());
+        return authorDTO;
     }
 }

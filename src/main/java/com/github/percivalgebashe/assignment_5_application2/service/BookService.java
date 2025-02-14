@@ -5,9 +5,11 @@ import com.github.percivalgebashe.assignment_5_application2.dto.BookFilterDTO;
 import com.github.percivalgebashe.assignment_5_application2.entity.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface BookService {
 
     Page<Book> findAll(Pageable pageable);

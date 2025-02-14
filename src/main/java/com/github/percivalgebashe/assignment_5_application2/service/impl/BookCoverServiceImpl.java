@@ -7,10 +7,12 @@ import com.github.percivalgebashe.assignment_5_application2.exception.ConflictEx
 import com.github.percivalgebashe.assignment_5_application2.exception.ResourceNotFoundException;
 import com.github.percivalgebashe.assignment_5_application2.repository.BookCoverRepository;
 import com.github.percivalgebashe.assignment_5_application2.service.BookCoverService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class BookCoverServiceImpl implements BookCoverService {
 
     private final BookCoverRepository bookCoverRepository;
