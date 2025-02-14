@@ -4,7 +4,10 @@ import com.github.percivalgebashe.assignment_5_application2.entity.Author;
 import com.github.percivalgebashe.assignment_5_application2.entity.Book;
 import com.github.percivalgebashe.assignment_5_application2.entity.Genre;
 import com.github.percivalgebashe.assignment_5_application2.entity.Publisher;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -12,6 +15,9 @@ import java.util.List;
 import java.util.Set;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class BookDTO {
     private Long book_id;
 

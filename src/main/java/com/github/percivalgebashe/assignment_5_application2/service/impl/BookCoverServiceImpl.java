@@ -6,11 +6,12 @@ import com.github.percivalgebashe.assignment_5_application2.exception.BadRequest
 import com.github.percivalgebashe.assignment_5_application2.exception.ConflictException;
 import com.github.percivalgebashe.assignment_5_application2.exception.ResourceNotFoundException;
 import com.github.percivalgebashe.assignment_5_application2.repository.BookCoverRepository;
+import com.github.percivalgebashe.assignment_5_application2.service.BookCoverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BookCoverServiceImpl {
+public class BookCoverServiceImpl implements BookCoverService {
 
     private final BookCoverRepository bookCoverRepository;
 
