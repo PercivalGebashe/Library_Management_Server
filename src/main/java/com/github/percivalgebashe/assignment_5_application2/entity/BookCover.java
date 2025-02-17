@@ -1,10 +1,7 @@
 package com.github.percivalgebashe.assignment_5_application2.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "book_covers")
@@ -15,12 +12,14 @@ import lombok.Setter;
 public class BookCover {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "book_id") // Using book_id as Primary Key
+    private String bookId;
 
-    @Column(nullable = false, unique = false)
-    private Long bookId;
+    @OneToOne
+    @MapsId // Ensures bookId matches the Book's primary key
+    @JoinColumn(name = "book_id", referencedColumnName = "bookId")
+    private Book book;
 
     @Column(nullable = false, unique = true)
-    private String imagePath;
+    private String imagePath; // Path to the book cover image
 }

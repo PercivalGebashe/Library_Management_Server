@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class BookCoverDTO {
-    private String bookId; // Uses Book ID directly
-    private String imagePath;
+public class PublisherDTO {
+    private String id; // Custom ID (String) if needed
+    private String name;
 }

@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "books")
@@ -17,8 +18,8 @@ import java.util.Set;
 public class Book implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(nullable = false, unique = true, length = 100) // Adjust length as needed
+    private String bookId;
 
     @ManyToMany(mappedBy = "books")
     private List<Author> authors;
@@ -27,7 +28,7 @@ public class Book implements Serializable {
     private String title;
 
     @Column(nullable = false)
-    private LocalDate publishedDate; // Removed @Temporal
+    private LocalDate publishedDate;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
@@ -40,7 +41,18 @@ public class Book implements Serializable {
 
     @ManyToMany
     @JoinTable(
-            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "bookId"),
             inverseJoinColumns = @JoinColumn(name = "publisher_id", referencedColumnName = "id"))
     private Set<Publisher> publishers;
+
+    // Custom method to generate a unique bookId
+    public void generateBookId() {
+        if (authors != null && !authors.isEmpty()) {
+            String authorNames = authors.stream()
+                    .map(Author::getName)
+                    .collect(Collectors.joining("_"));
+
+            this.bookId = authorNames.replaceAll("\\s+", "") + "_" + title.replaceAll("\\s+", "");
+        }
+    }
 }
