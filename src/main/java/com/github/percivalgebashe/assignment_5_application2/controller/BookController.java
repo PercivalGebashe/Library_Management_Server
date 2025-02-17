@@ -29,8 +29,10 @@ public class BookController {
     @GetMapping
     public ResponseEntity<Page<Book>> getBooks(Pageable pageable) {
         try {
+            System.out.println("BIiiiitch");
             return new ResponseEntity<>(bookService.findAll(pageable), HttpStatus.OK);
         }catch (NoContentFoundException e) {
+            System.out.println("NoContentFoundException");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }

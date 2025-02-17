@@ -33,7 +33,7 @@ public class BookServiceImpl implements BookService {
     public Page<Book> findAll(Pageable pageable) {
         Page<Book> page = bookRepository.findAll(pageable);
         if (page.isEmpty()){
-            throw new ResourceNotFoundException("Books not found");
+            throw new NoContentFoundException("No Books Found");
         }
         return page;
     }
