@@ -9,12 +9,12 @@ import java.util.Set;
 @Data
 @Builder
 public class BookDTO {
-    private String id; // Custom ID based on authors
+    private String id;
     private List<AuthorDTO> authors;
     private String title;
     private LocalDate publishedDate;
     private String description;
     private String isbn;
-    private String genres; // Comma-separated genres
+    private String genres;
     private Set<PublisherDTO> publishers;
 }

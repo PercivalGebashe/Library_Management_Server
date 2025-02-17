@@ -12,14 +12,14 @@ import lombok.*;
 public class BookCover {
 
     @Id
-    @Column(name = "book_id") // Using book_id as Primary Key
+    @Column(name = "book_id")
     private String bookId;
 
     @OneToOne
-    @MapsId // Ensures bookId matches the Book's primary key
+    @MapsId
     @JoinColumn(name = "book_id", referencedColumnName = "bookId")
     private Book book;
 
     @Column(nullable = false, unique = true)
-    private String imagePath; // Path to the book cover image
+    private String imagePath;
 }

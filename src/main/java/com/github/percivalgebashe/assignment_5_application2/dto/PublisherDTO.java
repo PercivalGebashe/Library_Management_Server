@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class PublisherDTO {
-    private String id; // Custom ID (String) if needed
+    private String id;
     private String name;
 }

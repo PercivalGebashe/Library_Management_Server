@@ -26,7 +26,7 @@ public class AuthorController {
 
 
     @GetMapping
-    public ResponseEntity<Object> getAuthorById(@RequestParam("id") Long id){
+    public ResponseEntity<Object> getAuthorById(@RequestParam("id") String id){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(authorService.getAuthorById(id));
         }catch (ResourceNotFoundException e){
@@ -37,7 +37,7 @@ public class AuthorController {
     }
 
     @GetMapping(value = "/authors", consumes = "application/json")
-    public ResponseEntity<Object> getAllAuthors(List<Long> authorIds){
+    public ResponseEntity<Object> getAllAuthors(List<String> authorIds){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(authorService.getAllAuthorsById(authorIds));
         }catch (NoContentFoundException e){

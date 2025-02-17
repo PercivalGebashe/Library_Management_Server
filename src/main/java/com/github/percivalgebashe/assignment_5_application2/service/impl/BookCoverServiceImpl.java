@@ -5,6 +5,7 @@ import com.github.percivalgebashe.assignment_5_application2.entity.BookCover;
 import com.github.percivalgebashe.assignment_5_application2.exception.BadRequestException;
 import com.github.percivalgebashe.assignment_5_application2.exception.ConflictException;
 import com.github.percivalgebashe.assignment_5_application2.exception.ResourceNotFoundException;
+import com.github.percivalgebashe.assignment_5_application2.mapper.DTOMapper;
 import com.github.percivalgebashe.assignment_5_application2.repository.BookCoverRepository;
 import com.github.percivalgebashe.assignment_5_application2.service.BookCoverService;
 import jakarta.transaction.Transactional;
@@ -22,25 +23,25 @@ public class BookCoverServiceImpl implements BookCoverService {
         this.bookCoverRepository = bookCoverRepository;
     }
 
-    public BookCover getBookCover(Long id) {
+    public BookCover getBookCover(String id) {
         if(null == id) {
             throw new BadRequestException("Book cover id cannot be null.");
         }
         return bookCoverRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Book with ID %d not found", id)));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Book with ID %s not found", id)));
     }
 
     public BookCover updateBookCover(BookCoverDTO bookCoverDTO) {
         validateBookCoverUpdate(bookCoverDTO);
 
-        return bookCoverRepository.findById(bookCoverDTO.getId())
+        return bookCoverRepository.findById(bookCoverDTO.getBookId())
                 .map(existingBookCover -> {
-                    existingBookCover.setImagePath(bookCoverDTO.getImage_path());
+                    existingBookCover.setImagePath(bookCoverDTO.getImagePath());
                     return existingBookCover;
                 })
                 .orElseThrow(() -> new ResourceNotFoundException(String.format(
-                        "Book cover with ID %d Not found",
-                        bookCoverDTO.getId())));
+                        "Book cover with ID %s Not found",
+                        bookCoverDTO.getBookId())));
     }
 
     public BookCover saveBook(BookCoverDTO bookCoverDTO) {
@@ -49,12 +50,12 @@ public class BookCoverServiceImpl implements BookCoverService {
         }
         validateBookCoverAdd(bookCoverDTO);
 
-        if(!bookCoverRepository.existsByImagePath(bookCoverDTO.getImage_path())){
-            return bookCoverRepository.save(bookCoverDTO.toEntity());
+        if(!bookCoverRepository.existsByImagePath(bookCoverDTO.getImagePath())){
+            return bookCoverRepository.save(DTOMapper.toBookCoverEntity(bookCoverDTO));
         }else {
             throw new ConflictException(String.format(
                     "Book Cover With PATH %s Already Exists",
-                    bookCoverDTO.getImage_path()));
+                    bookCoverDTO.getImagePath()));
         }
     }
 
@@ -62,13 +63,10 @@ public class BookCoverServiceImpl implements BookCoverService {
         if(null == bookCoverDTO) {
             throw new BadRequestException("Book cover cannot be null.");
         }
-        if (null == bookCoverDTO.getId()){
-            throw new BadRequestException("id cannot be null.");
-        }
-        if (null == bookCoverDTO.getBook_id()){
+        if (null == bookCoverDTO.getBookId()){
             throw new BadRequestException("Book cover id cannot be null.");
         }
-        if (null == bookCoverDTO.getImage_path()){
+        if (null == bookCoverDTO.getImagePath()){
             throw new BadRequestException("Image path cannot be null.");
         }
     }
@@ -77,21 +75,21 @@ public class BookCoverServiceImpl implements BookCoverService {
         if(null == bookCoverDTO) {
             throw new BadRequestException("Book cover cannot be null.");
         }
-        if (null == bookCoverDTO.getBook_id()){
+        if (null == bookCoverDTO.getBookId()){
             throw new BadRequestException("Book cover id cannot be null.");
         }
-        if (null == bookCoverDTO.getImage_path()){
+        if (null == bookCoverDTO.getImagePath()){
             throw new BadRequestException("Image path cannot be null.");
         }
     }
 
-    public void deleteBook(Long id) {
+    public void deleteBook(String id) {
         if(null == id) {
             throw new BadRequestException("Book id cannot be null.");
         }
 
         if(!bookCoverRepository.existsById(id)){
-            throw new ResourceNotFoundException(String.format("Book with ID %d not found", id));
+            throw new ResourceNotFoundException(String.format("Book with ID %s not found", id));
         }
         bookCoverRepository.deleteById(id);
     }

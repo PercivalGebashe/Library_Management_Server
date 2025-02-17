@@ -6,6 +6,7 @@ import com.github.percivalgebashe.assignment_5_application2.entity.Book;
 import com.github.percivalgebashe.assignment_5_application2.exception.BadRequestException;
 import com.github.percivalgebashe.assignment_5_application2.exception.NoContentFoundException;
 import com.github.percivalgebashe.assignment_5_application2.exception.ResourceNotFoundException;
+import com.github.percivalgebashe.assignment_5_application2.mapper.DTOMapper;
 import com.github.percivalgebashe.assignment_5_application2.repository.BookRepository;
 import com.github.percivalgebashe.assignment_5_application2.service.BookService;
 import com.github.percivalgebashe.assignment_5_application2.specification.BookSpecificationBuilder;
@@ -38,9 +39,9 @@ public class BookServiceImpl implements BookService {
         return page;
     }
 
-    public Book findById(Long id) {
+    public Book findById(String id) {
         return bookRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Book with ID %d not found", id)));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Book with ID %s not found", id)));
     }
 
     public Page<Book> findBookByFilter(BookFilterDTO filter, Pageable pageable) {
@@ -56,7 +57,7 @@ public class BookServiceImpl implements BookService {
     public Book save(BookDTO bookDTO) {
         validateBookDTOAdd(bookDTO);
 
-        return bookRepository.saveAndFlush(bookDTO.toBookEntity());
+        return bookRepository.saveAndFlush(DTOMapper.toBookEntity(bookDTO));
     }
 
     public List<Book> saveAll(List<BookDTO> books) {
@@ -69,7 +70,7 @@ public class BookServiceImpl implements BookService {
         }
 
         List<Book> bookEntities = books.stream()
-                .map(BookDTO::toBookEntity)
+                .map(DTOMapper::toBookEntity)
                 .map(bookRepository::saveAndFlush)
                 .toList();
 
@@ -80,13 +81,13 @@ public class BookServiceImpl implements BookService {
 
         validateBookDTO(bookDTO);
 
-        return bookRepository.findById(bookDTO.getBook_id())
+        return bookRepository.findById(bookDTO.getId())
                 .map(existingBook ->{
                     updateEntity(bookDTO, existingBook);
                     return bookRepository.saveAndFlush(existingBook);
                 })
-                .orElseThrow(() ->new ResourceNotFoundException(String.format("Book with ID %d not found",
-                        bookDTO.getBook_id())));
+                .orElseThrow(() ->new ResourceNotFoundException(String.format("Book with ID %s not found",
+                        bookDTO.getId())));
     }
 
     public List<Book> updateBooks(List<BookDTO> bookDTOs) {
@@ -99,15 +100,15 @@ public class BookServiceImpl implements BookService {
         }
 
         List<Book> books = bookDTOs.stream()
-                .map(bookDTO -> bookRepository.findById(bookDTO.getBook_id())
-                        .orElseThrow(() -> new ResourceNotFoundException(String.format("Book with ID %d not found",
-                                bookDTO.getBook_id())))).toList();
+                .map(bookDTO -> bookRepository.findById(bookDTO.getId())
+                        .orElseThrow(() -> new ResourceNotFoundException(String.format("Book with ID %s not found",
+                                bookDTO.getId())))).toList();
 
         return bookRepository.saveAll(books);
     }
 
     private void validateBookDTO(BookDTO bookDTO) {
-        if (bookDTO.getBook_id() == null) {
+        if (bookDTO.getId() == null) {
             throw new BadRequestException("Book id cannot be empty.");
         }
         if (StringUtils.isBlank(bookDTO.getTitle())) {
@@ -155,7 +156,7 @@ public class BookServiceImpl implements BookService {
         bookToUpdate.setTitle(bookDTO.getTitle());
         bookToUpdate.setIsbn(bookDTO.getIsbn());
         bookToUpdate.setPublishedDate(bookDTO.getPublishedDate());
-        bookToUpdate.setAuthors(bookDTO.getAuthors());
+        bookToUpdate.setAuthors(bookDTO.getAuthors().stream().map(DTOMapper::toAuthorEntity).toList());
         bookToUpdate.setGenres(bookDTO.getGenres());
         bookToUpdate.setDescription(bookDTO.getDescription());
     }

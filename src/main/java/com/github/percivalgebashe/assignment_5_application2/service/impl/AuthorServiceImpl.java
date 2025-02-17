@@ -6,6 +6,7 @@ import com.github.percivalgebashe.assignment_5_application2.exception.BadRequest
 import com.github.percivalgebashe.assignment_5_application2.exception.ConflictException;
 import com.github.percivalgebashe.assignment_5_application2.exception.NoContentFoundException;
 import com.github.percivalgebashe.assignment_5_application2.exception.ResourceNotFoundException;
+import com.github.percivalgebashe.assignment_5_application2.mapper.DTOMapper;
 import com.github.percivalgebashe.assignment_5_application2.repository.AuthorRepository;
 import com.github.percivalgebashe.assignment_5_application2.service.AuthorService;
 import jakarta.transaction.Transactional;
@@ -27,8 +28,8 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author getAuthorById(Long id) {
-        if(null == id || id <= 0){
+    public Author getAuthorById(String id) {
+        if(null == id || id.isEmpty()){
             throw new BadRequestException("Id cannot be null or empty");
         }
         return authorRepository.findById(id)
@@ -46,7 +47,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public List<Author> getAllAuthorsById(List<Long> authorIds) {
+    public List<Author> getAllAuthorsById(List<String> authorIds) {
         if(null == authorIds || authorIds.isEmpty()){
             throw new BadRequestException("Ids cannot be null or empty");
         }
@@ -69,7 +70,7 @@ public class AuthorServiceImpl implements AuthorService {
         if (authorRepository.existsById(authorDTO.getId())) {
             throw new ConflictException("Author with ID %s already exists");
         }
-        return authorRepository.save(authorDTO.fromDTO());
+        return authorRepository.save(DTOMapper.toAuthorEntity(authorDTO));
     }
 
     @Override
@@ -92,7 +93,7 @@ public class AuthorServiceImpl implements AuthorService {
 
         return authors.stream()
                 .map(authorDTO -> {
-                    if(null != authorDTO.getId() && authorDTO.getId() > 0){
+                    if(null != authorDTO.getId() && !authorDTO.getId().isEmpty()){
                         if(authorRepository.existsById(authorDTO.getId())){
                            return authorRepository.findById(authorDTO.getId())
                                    .orElseThrow(() -> new ResourceNotFoundException(String.format("Author with ID %s not found", authorDTO.getId())));
@@ -103,8 +104,8 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void deleteAuthor(Long id) {
-        if(null == id || id <= 0){
+    public void deleteAuthor(String id) {
+        if(null == id || id.isEmpty()){
             throw new BadRequestException("Id cannot be null or empty");
         }
         if (authorRepository.existsById(id)) {
@@ -114,7 +115,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void deleteAuthors(List<Long> authorIds) {
+    public void deleteAuthors(List<String> authorIds) {
         if(null == authorIds || authorIds.isEmpty()){
             throw new BadRequestException("Ids cannot be null or empty");
         }
@@ -131,7 +132,7 @@ public class AuthorServiceImpl implements AuthorService {
         if(null == authorDTO){
             throw new BadRequestException("Author cannot be null");
         }
-        if (null == authorDTO.getId() || authorDTO.getId() <= 0) {
+        if (null == authorDTO.getId() || authorDTO.getId().isEmpty()) {
             throw new BadRequestException("Id cannot be null or empty");
         }
         if(null == authorDTO.getName() || authorDTO.getName().isEmpty()){

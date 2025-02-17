@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 @Service
 public interface BookCoverService {
 
-    void deleteBook(Long id);
+    void deleteBook(String id);
 
     BookCover saveBook(BookCoverDTO bookCoverDTO);
 
-    BookCover getBookCover(Long id);
+    BookCover getBookCover(String id);
 
     BookCover updateBookCover(BookCoverDTO bookCoverDTO);
 }

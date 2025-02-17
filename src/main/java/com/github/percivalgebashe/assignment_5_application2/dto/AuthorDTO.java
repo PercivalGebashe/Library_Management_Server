@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 @Builder
 public class AuthorDTO {
-    private String id; // Custom ID (String) if required
+    private String id;
     private String name;
-    private List<BookDto> books; // Avoid cycles in conversion logic
+    private List<BookDTO> books;
 }

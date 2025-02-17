@@ -1,7 +1,10 @@
 package com.github.percivalgebashe.assignment_5_application2.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -18,7 +21,7 @@ import java.util.stream.Collectors;
 public class Book implements Serializable {
 
     @Id
-    @Column(nullable = false, unique = true, length = 100) // Adjust length as needed
+    @Column(nullable = false, unique = true, length = 100)
     private String bookId;
 
     @ManyToMany(mappedBy = "books")
@@ -45,7 +48,6 @@ public class Book implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "publisher_id", referencedColumnName = "id"))
     private Set<Publisher> publishers;
 
-    // Custom method to generate a unique bookId
     public void generateBookId() {
         if (authors != null && !authors.isEmpty()) {
             String authorNames = authors.stream()

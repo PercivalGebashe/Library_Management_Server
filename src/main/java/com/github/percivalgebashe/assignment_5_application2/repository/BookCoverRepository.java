@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface BookCoverRepository extends JpaRepository<BookCover, Long> {
+public interface BookCoverRepository extends JpaRepository<BookCover, String> {
 
     boolean existsByImagePath(String imagePath);
 }
