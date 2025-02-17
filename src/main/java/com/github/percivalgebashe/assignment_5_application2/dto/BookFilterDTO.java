@@ -1,7 +1,6 @@
 package com.github.percivalgebashe.assignment_5_application2.dto;
 
 import com.github.percivalgebashe.assignment_5_application2.entity.Author;
-import com.github.percivalgebashe.assignment_5_application2.entity.Genre;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +18,7 @@ public class BookFilterDTO {
 
     private String title;
 
-    private Set<Genre> genres;
+    private String genres;
 
     private Date publishedDateStart;
 

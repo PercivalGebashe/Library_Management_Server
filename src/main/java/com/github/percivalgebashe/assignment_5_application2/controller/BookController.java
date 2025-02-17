@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/books")
 public class BookController {
@@ -60,6 +62,14 @@ public class BookController {
     public ResponseEntity<Object> addBook(@RequestBody BookDTO book) {
         try {
             return new ResponseEntity<>(bookService.save(book), HttpStatus.CREATED);
+        }catch (BadRequestException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+    @PostMapping("/add")
+    public ResponseEntity<Object> addBooks(@RequestBody List<BookDTO> books) {
+        try {
+            return new ResponseEntity<>(bookService.saveAll(books), HttpStatus.CREATED);
         }catch (BadRequestException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

@@ -2,7 +2,6 @@ package com.github.percivalgebashe.assignment_5_application2.dto;
 
 import com.github.percivalgebashe.assignment_5_application2.entity.Author;
 import com.github.percivalgebashe.assignment_5_application2.entity.Book;
-import com.github.percivalgebashe.assignment_5_application2.entity.Genre;
 import com.github.percivalgebashe.assignment_5_application2.entity.Publisher;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,7 +31,7 @@ public class BookDTO {
 
     private String isbn;
 
-    private Set<Genre> genres;
+    private String genres;
 
     public Book toBookEntity() {
         Book book = new Book();

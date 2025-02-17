@@ -35,12 +35,8 @@ public class Book implements Serializable {
     @Column(nullable = false, unique = true)
     private String isbn;
 
-    @ManyToMany
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id")
-    )
-    private Set<Genre> genres;
+    @Column(nullable = false)
+    private String genres;
 
     @ManyToMany
     @JoinTable(

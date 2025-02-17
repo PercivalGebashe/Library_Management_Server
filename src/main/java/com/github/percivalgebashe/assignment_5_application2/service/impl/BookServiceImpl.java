@@ -54,7 +54,7 @@ public class BookServiceImpl implements BookService {
     }
 
     public Book save(BookDTO bookDTO) {
-        validateBookDTO(bookDTO);
+        validateBookDTOAdd(bookDTO);
 
         return bookRepository.saveAndFlush(bookDTO.toBookEntity());
     }
@@ -65,7 +65,7 @@ public class BookServiceImpl implements BookService {
         }
 
         for (BookDTO bookDTO : books) {
-            validateBookDTO(bookDTO);
+            validateBookDTOAdd(bookDTO);
         }
 
         List<Book> bookEntities = books.stream()
@@ -110,6 +110,27 @@ public class BookServiceImpl implements BookService {
         if (bookDTO.getBook_id() == null) {
             throw new BadRequestException("Book id cannot be empty.");
         }
+        if (StringUtils.isBlank(bookDTO.getTitle())) {
+            throw new BadRequestException("Book title cannot be empty.");
+        }
+        if (StringUtils.isBlank(bookDTO.getIsbn())) {
+            throw new BadRequestException("Book ISBN cannot be empty.");
+        }
+        if (bookDTO.getPublishedDate() == null) {
+            throw new BadRequestException("Published date is required.");
+        }
+        if (bookDTO.getAuthors() == null || bookDTO.getAuthors().isEmpty()) {
+            throw new BadRequestException("Authors cannot be empty.");
+        }
+        if (bookDTO.getGenres() == null || bookDTO.getGenres().isEmpty()) {
+            throw new BadRequestException("Genres cannot be empty.");
+        }
+        if (StringUtils.isBlank(bookDTO.getDescription())) {
+            throw new BadRequestException("Description cannot be empty.");
+        }
+    }
+
+    private void validateBookDTOAdd(BookDTO bookDTO) {
         if (StringUtils.isBlank(bookDTO.getTitle())) {
             throw new BadRequestException("Book title cannot be empty.");
         }
