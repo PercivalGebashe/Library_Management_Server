@@ -38,6 +38,13 @@ public class Author implements Serializable {
     )
     private List<Book> books;
 
+    @PrePersist
+    private void generateId() {
+        if(authorId == null) {
+            generateAuthorId();
+        }
+    }
+
     public void generateAuthorId() {
         this.authorId = name.replaceAll("\\s+", "") + "_" + birthDate.getYear();
     }

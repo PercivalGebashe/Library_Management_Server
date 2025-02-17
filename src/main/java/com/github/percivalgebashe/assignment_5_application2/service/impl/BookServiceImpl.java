@@ -71,10 +71,15 @@ public class BookServiceImpl implements BookService {
 
         List<Book> bookEntities = books.stream()
                 .map(DTOMapper::toBookEntity)
-                .map(bookRepository::saveAndFlush)
+                .peek(book -> {
+                    if (bookRepository.existsById(book.getBookId())){
+                        throw new BadRequestException("Book with ID " + book.getBookId() + " already exists");
+                    }
+                })
                 .toList();
+        System.out.println("Books to be saved: " + bookEntities);
 
-        return bookRepository.saveAll(bookEntities);
+        return bookRepository.saveAllAndFlush(bookEntities);
     }
 
     public Book updateBook(BookDTO bookDTO) {

@@ -45,8 +45,15 @@ public class Book implements Serializable {
     @ManyToMany
     @JoinTable(
             joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "bookId"),
-            inverseJoinColumns = @JoinColumn(name = "publisher_id", referencedColumnName = "id"))
+            inverseJoinColumns = @JoinColumn(name = "publisher_id", referencedColumnName = "publisherId"))
     private Set<Publisher> publishers;
+
+    @PrePersist
+    private void generateId() {
+        if(bookId == null) {
+            generateBookId();
+        }
+    }
 
     public void generateBookId() {
         if (authors != null && !authors.isEmpty()) {

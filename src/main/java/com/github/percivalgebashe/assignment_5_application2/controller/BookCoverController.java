@@ -22,7 +22,7 @@ public class BookCoverController {
     private BookCoverServiceImpl bookCoverService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getBookCover(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> getBookCover(@PathVariable("id") String id) {
         try {
             return new ResponseEntity<>(bookCoverService.getBookCover(id), HttpStatus.OK);
         }catch (BadRequestException e){
@@ -56,7 +56,7 @@ public class BookCoverController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteBookCover(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> deleteBookCover(@PathVariable("id") String id) {
         try {
             bookCoverService.deleteBook(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Deleted Book Cover");

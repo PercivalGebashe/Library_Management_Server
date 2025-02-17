@@ -31,7 +31,6 @@ public class BookController {
     @GetMapping
     public ResponseEntity<Page<Book>> getBooks(Pageable pageable) {
         try {
-            System.out.println("BIiiiitch");
             return new ResponseEntity<>(bookService.findAll(pageable), HttpStatus.OK);
         }catch (NoContentFoundException e) {
             System.out.println("NoContentFoundException");
@@ -40,7 +39,7 @@ public class BookController {
     }
 
     @GetMapping({"/id"})
-    public ResponseEntity<Book> getBookById(@RequestParam Long id) {
+    public ResponseEntity<Book> getBookById(@RequestParam String id) {
         try {
             return new ResponseEntity<>(bookService.findById(id), HttpStatus.OK);
         }catch (ResourceNotFoundException e) {
@@ -61,6 +60,7 @@ public class BookController {
     @PostMapping
     public ResponseEntity<Object> addBook(@RequestBody BookDTO book) {
         try {
+            System.out.println(book);
             return new ResponseEntity<>(bookService.save(book), HttpStatus.CREATED);
         }catch (BadRequestException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
