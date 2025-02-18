@@ -42,8 +42,8 @@ public class BookServiceImpl implements BookService {
 
     }
 
-    public Book findById(String id) {
-        return bookRepository.findById(id)
+    public BookDTO findById(String id) {
+        return bookRepository.findById(id).map(DTOMapper::toBookDto)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Book with ID %s not found", id)));
     }
 

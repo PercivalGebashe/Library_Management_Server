@@ -14,7 +14,7 @@ public interface BookService {
 
     Page<BookDTO> findAll(Pageable pageable);
 
-    Book findById(String id);
+    BookDTO findById(String id);
 
     Page<BookDTO> findBookByFilter(BookFilterDTO filter, Pageable pageable);
 
