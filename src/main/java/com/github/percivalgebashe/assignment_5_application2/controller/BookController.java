@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://127.0.0.1:8081") // Allow requests from client
 @RestController
 @RequestMapping("/api/v1/books")
 public class BookController {
@@ -31,7 +32,8 @@ public class BookController {
     @GetMapping
     public ResponseEntity<Page<Book>> getBooks(Pageable pageable) {
         try {
-            return new ResponseEntity<>(bookService.findAll(pageable), HttpStatus.OK);
+            Page<BookDTO> page = bookService.findAll(pageable);
+            return new ResponseEntity<>(page, HttpStatus.OK);
         }catch (NoContentFoundException e) {
             System.out.println("NoContentFoundException");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

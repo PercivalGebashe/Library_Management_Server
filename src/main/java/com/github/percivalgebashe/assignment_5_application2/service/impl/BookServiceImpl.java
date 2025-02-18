@@ -4,6 +4,7 @@ import com.github.percivalgebashe.assignment_5_application2.dto.BookDTO;
 import com.github.percivalgebashe.assignment_5_application2.dto.BookFilterDTO;
 import com.github.percivalgebashe.assignment_5_application2.entity.Book;
 import com.github.percivalgebashe.assignment_5_application2.exception.BadRequestException;
+import com.github.percivalgebashe.assignment_5_application2.exception.ConflictException;
 import com.github.percivalgebashe.assignment_5_application2.exception.NoContentFoundException;
 import com.github.percivalgebashe.assignment_5_application2.exception.ResourceNotFoundException;
 import com.github.percivalgebashe.assignment_5_application2.mapper.DTOMapper;
@@ -19,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -31,12 +33,13 @@ public class BookServiceImpl implements BookService {
         this.bookRepository = bookRepository;
     }
 
-    public Page<Book> findAll(Pageable pageable) {
+    public Page<BookDTO> findAll(Pageable pageable) {
         Page<Book> page = bookRepository.findAll(pageable);
         if (page.isEmpty()){
             throw new NoContentFoundException("No Books Found");
         }
-        return page;
+        return page.map(DTOMapper::toBookDto);
+
     }
 
     public Book findById(String id) {
@@ -44,58 +47,63 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Book with ID %s not found", id)));
     }
 
-    public Page<Book> findBookByFilter(BookFilterDTO filter, Pageable pageable) {
+    public Page<BookDTO> findBookByFilter(BookFilterDTO filter, Pageable pageable) {
         Specification<Book> bookSpecification = BookSpecificationBuilder.getBookFilterCriteria(filter);
         Page<Book> page = bookRepository.findAll(bookSpecification, pageable);
         if (page.getSize() == 0){
            throw new NoContentFoundException("No books found");
 
         }
-        return page;
+        return page.map(DTOMapper::toBookDto);
     }
 
     public Book save(BookDTO bookDTO) {
         validateBookDTOAdd(bookDTO);
+        bookDTO.generateBookId();
+        if(!bookRepository.existsById(bookDTO.getId())) {
 
-        return bookRepository.saveAndFlush(DTOMapper.toBookEntity(bookDTO));
+            return bookRepository.saveAndFlush(DTOMapper.toBookEntity(bookDTO));
+        }
+        throw new ConflictException(String.format("Book with ID %s already exists", bookDTO.getId()));
     }
 
-    public List<Book> saveAll(List<BookDTO> books) {
+    public List<BookDTO> saveAll(List<BookDTO> books) {
         if (books == null || books.isEmpty()) {
             throw new BadRequestException("Book list cannot be empty.");
         }
 
         for (BookDTO bookDTO : books) {
             validateBookDTOAdd(bookDTO);
+            bookDTO.generateBookId();
         }
 
         List<Book> bookEntities = books.stream()
                 .map(DTOMapper::toBookEntity)
                 .peek(book -> {
                     if (bookRepository.existsById(book.getBookId())){
-                        throw new BadRequestException("Book with ID " + book.getBookId() + " already exists");
+                        throw new ConflictException("Book with ID " + book.getBookId() + " already exists");
                     }
                 })
                 .toList();
         System.out.println("Books to be saved: " + bookEntities);
 
-        return bookRepository.saveAllAndFlush(bookEntities);
+        return bookRepository.saveAllAndFlush(bookEntities).stream().map(DTOMapper::toBookDto).toList();
     }
 
-    public Book updateBook(BookDTO bookDTO) {
+    public BookDTO updateBook(BookDTO bookDTO) {
 
         validateBookDTO(bookDTO);
 
         return bookRepository.findById(bookDTO.getId())
                 .map(existingBook ->{
                     updateEntity(bookDTO, existingBook);
-                    return bookRepository.saveAndFlush(existingBook);
+                    return DTOMapper.toBookDto(bookRepository.saveAndFlush(existingBook));
                 })
                 .orElseThrow(() ->new ResourceNotFoundException(String.format("Book with ID %s not found",
                         bookDTO.getId())));
     }
 
-    public List<Book> updateBooks(List<BookDTO> bookDTOs) {
+    public List<BookDTO> updateBooks(List<BookDTO> bookDTOs) {
         if (bookDTOs == null || bookDTOs.isEmpty()) {
             throw new BadRequestException("Book list cannot be empty.");
         }
@@ -109,7 +117,7 @@ public class BookServiceImpl implements BookService {
                         .orElseThrow(() -> new ResourceNotFoundException(String.format("Book with ID %s not found",
                                 bookDTO.getId())))).toList();
 
-        return bookRepository.saveAll(books);
+        return DTOMapper.toBookDtoList(bookRepository.saveAll(books));
     }
 
     private void validateBookDTO(BookDTO bookDTO) {

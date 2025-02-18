@@ -15,7 +15,7 @@ public class AuthorDTO {
     private LocalDate birthDate;
     private List<BookDTO> books;
 
-    public Optional<String> generateAuthorId() {
-        return Optional.of(name.replaceAll("\\s+", "") + "_" + birthDate.getYear());
+    public void generateAuthorId() {
+        id = name.replaceAll("\\s+", "") + "_" + birthDate.getYear();
     }
 }

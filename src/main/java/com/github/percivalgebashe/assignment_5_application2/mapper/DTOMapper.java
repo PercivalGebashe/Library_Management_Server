@@ -3,12 +3,11 @@ package com.github.percivalgebashe.assignment_5_application2.mapper;
 import com.github.percivalgebashe.assignment_5_application2.dto.AuthorDTO;
 import com.github.percivalgebashe.assignment_5_application2.dto.BookCoverDTO;
 import com.github.percivalgebashe.assignment_5_application2.dto.BookDTO;
-import com.github.percivalgebashe.assignment_5_application2.dto.PublisherDTO;
 import com.github.percivalgebashe.assignment_5_application2.entity.Author;
 import com.github.percivalgebashe.assignment_5_application2.entity.Book;
 import com.github.percivalgebashe.assignment_5_application2.entity.BookCover;
-import com.github.percivalgebashe.assignment_5_application2.entity.Publisher;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class DTOMapper {
@@ -18,12 +17,16 @@ public class DTOMapper {
                 .id(book.getBookId())
                 .authors(book.getAuthors().stream().map(DTOMapper::toAuthorDto).collect(Collectors.toList()))
                 .title(book.getTitle())
+                .publishers(book.getPublishers())
                 .publishedDate(book.getPublishedDate())
                 .description(book.getDescription())
                 .isbn(book.getIsbn())
                 .genres(book.getGenres())
-                .publishers(book.getPublishers().stream().map(DTOMapper::toPublisherDto).collect(Collectors.toSet()))
                 .build();
+    }
+
+    public static List<BookDTO> toBookDtoList(List<Book> books) {
+        return books.stream().map(DTOMapper::toBookDto).collect(Collectors.toList());
     }
 
     public static Book toBookEntity(BookDTO bookDto) {
@@ -31,12 +34,16 @@ public class DTOMapper {
         book.setBookId(bookDto.getId());
         book.setAuthors(bookDto.getAuthors().stream().map(DTOMapper::toAuthorEntity).collect(Collectors.toList()));
         book.setTitle(bookDto.getTitle());
+        book.setPublishers(bookDto.getPublishers());
         book.setPublishedDate(bookDto.getPublishedDate());
         book.setDescription(bookDto.getDescription());
         book.setIsbn(bookDto.getIsbn());
         book.setGenres(bookDto.getGenres());
-        book.setPublishers(bookDto.getPublishers().stream().map(DTOMapper::toPublisherEntity).collect(Collectors.toSet()));
         return book;
+    }
+
+    public static List<Book> toBooKEntityList(List<BookDTO> bookDTOS) {
+        return bookDTOS.stream().map(DTOMapper::toBookEntity).collect(Collectors.toList());
     }
 
     public static AuthorDTO toAuthorDto(Author author) {
@@ -46,6 +53,10 @@ public class DTOMapper {
                 .build();
     }
 
+    public static List<AuthorDTO> toAuthorDtoList(List<Author> authors) {
+        return authors.stream().map(DTOMapper::toAuthorDto).collect(Collectors.toList());
+    }
+
     public static Author toAuthorEntity(AuthorDTO authorDto) {
         Author author = new Author();
         author.setAuthorId(authorDto.getId());
@@ -53,19 +64,10 @@ public class DTOMapper {
         return author;
     }
 
-    public static PublisherDTO toPublisherDto(Publisher publisher) {
-        return PublisherDTO.builder()
-                .id(publisher.getPublisherId())
-                .name(publisher.getName())
-                .build();
+    public static List<Author> toAuthorEntityList(List<AuthorDTO> authorDTOS) {
+        return authorDTOS.stream().map(DTOMapper::toAuthorEntity).collect(Collectors.toList());
     }
 
-    public static Publisher toPublisherEntity(PublisherDTO publisherDto) {
-        Publisher publisher = new Publisher();
-        publisher.setPublisherId(publisherDto.getId());
-        publisher.setName(publisherDto.getName());
-        return publisher;
-    }
 
     public static BookCoverDTO toBookCoverDto(BookCover bookCover) {
         return BookCoverDTO.builder()
@@ -74,10 +76,18 @@ public class DTOMapper {
                 .build();
     }
 
+    public static List<BookCoverDTO> toBookCoverDtoList(List<BookCover> bookCovers) {
+        return bookCovers.stream().map(DTOMapper::toBookCoverDto).collect(Collectors.toList());
+    }
+
     public static BookCover toBookCoverEntity(BookCoverDTO bookCoverDto) {
         BookCover bookCover = new BookCover();
         bookCover.setBookId(bookCoverDto.getBookId());
         bookCover.setImagePath(bookCoverDto.getImagePath());
         return bookCover;
+    }
+
+    public static List<BookCover> toBookCoverEntityList(List<BookCoverDTO> bookCoverDTOS) {
+        return bookCoverDTOS.stream().map(DTOMapper::toBookCoverEntity).collect(Collectors.toList());
     }
 }

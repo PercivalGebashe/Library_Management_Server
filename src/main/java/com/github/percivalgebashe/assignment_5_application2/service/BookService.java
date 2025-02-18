@@ -12,17 +12,17 @@ import java.util.List;
 @Service
 public interface BookService {
 
-    Page<Book> findAll(Pageable pageable);
+    Page<BookDTO> findAll(Pageable pageable);
 
     Book findById(String id);
 
-    Page<Book> findBookByFilter(BookFilterDTO filter, Pageable pageable);
+    Page<BookDTO> findBookByFilter(BookFilterDTO filter, Pageable pageable);
 
     Book save(BookDTO book);
 
-    List<Book> saveAll(List<BookDTO> books);
+    List<BookDTO> saveAll(List<BookDTO> books);
 
-    Book updateBook(BookDTO bookDTO);
+    BookDTO updateBook(BookDTO bookDTO);
 
-    List<Book> updateBooks(List<BookDTO> bookDTOs);
+    List<BookDTO> updateBooks(List<BookDTO> bookDTOs);
 }

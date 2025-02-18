@@ -19,16 +19,14 @@ public class BookDTO {
     private String description;
     private String isbn;
     private String genres;
-    private Set<PublisherDTO> publishers;
-
-    public Optional<String> generateBookId() {
+    private String publishers;
+    public void generateBookId() {
         if (authors != null && !authors.isEmpty()) {
             String authorNames = authors.stream()
                     .map(AuthorDTO::getName)
                     .collect(Collectors.joining("_"));
 
-            return Optional.of(authorNames.replaceAll("\\s+", "") + "_" + title.replaceAll("\\s+", ""));
+             id = authorNames.replaceAll("\\s+", "") + "_" + title.replaceAll("\\s+", "");
         }
-        return null;
     }
 }
