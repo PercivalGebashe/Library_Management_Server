@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://127.0.0.1:", methods = {
+        RequestMethod.POST,
+        RequestMethod.GET,
+        RequestMethod.PUT,
+        RequestMethod.DELETE,
+}) // Allow requests from client
 @RestController
 @RequestMapping("/api/v1/images/book_cover")
 public class BookCoverController {

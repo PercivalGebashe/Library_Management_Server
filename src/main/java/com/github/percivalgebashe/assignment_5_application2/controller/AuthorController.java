@@ -13,8 +13,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://127.0.0.1:", methods = {
+        RequestMethod.POST,
+        RequestMethod.GET,
+        RequestMethod.PUT,
+        RequestMethod.DELETE,
+}) // Allow requests from client
 @RestController
-@RequestMapping("api/v1/author")
+@RequestMapping("/api/v1/author")
 public class AuthorController {
 
     private final AuthorService authorService;
@@ -52,6 +58,7 @@ public class AuthorController {
     @PostMapping(consumes = "application/json")
     public ResponseEntity<Object> addAuthor(@RequestBody AuthorDTO authorDTO){
         try {
+            System.out.println("Adding author: " + authorDTO);
             return ResponseEntity.status(HttpStatus.OK).body(authorService.addAuthor(authorDTO));
         }catch (BadRequestException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

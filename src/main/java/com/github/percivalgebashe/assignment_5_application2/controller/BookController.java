@@ -16,7 +16,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://127.0.0.1:8081") // Allow requests from client
+@CrossOrigin(origins = "http://127.0.0.1:", methods = {
+        RequestMethod.POST,
+        RequestMethod.GET,
+        RequestMethod.PUT,
+        RequestMethod.DELETE,
+}) // Allow requests from client
 @RestController
 @RequestMapping("/api/v1/books")
 public class BookController {
@@ -77,9 +82,10 @@ public class BookController {
         }
     }
 
-    @PutMapping(value = "/edit", consumes = "application/json")
+    @PutMapping(value = "/update", consumes = "application/json")
     public ResponseEntity<BookDTO> editBook(@RequestBody BookDTO bookDTO) {
         try {
+            System.out.println("Server bookDTO: " + bookDTO);
             return new ResponseEntity<>(bookService.updateBook(bookDTO), HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

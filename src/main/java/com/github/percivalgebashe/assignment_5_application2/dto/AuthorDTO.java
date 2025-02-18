@@ -13,6 +13,7 @@ public class AuthorDTO {
     private String id;
     private String name;
     private LocalDate birthDate;
+    private String biography;
     private List<BookDTO> books;
 
     public void generateAuthorId() {

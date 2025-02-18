@@ -1,5 +1,7 @@
 package com.github.percivalgebashe.assignment_5_application2.entity;
 
+import com.github.percivalgebashe.assignment_5_application2.dto.AuthorDTO;
+import com.github.percivalgebashe.assignment_5_application2.util.IdGenerator;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -54,11 +56,9 @@ public class Book implements Serializable {
 
     public void generateBookId() {
         if (authors != null && !authors.isEmpty()) {
-            String authorNames = authors.stream()
-                    .map(Author::getName)
-                    .collect(Collectors.joining("_"));
 
-            this.bookId = authorNames.replaceAll("\\s+", "") + "_" + title.replaceAll("\\s+", "");
+            this.bookId = IdGenerator.generateBookId(authors.stream().map(Author::getName).toList()
+                    ,title, publishedDate);
         }
     }
 }
