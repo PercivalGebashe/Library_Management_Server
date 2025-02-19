@@ -31,7 +31,7 @@ public class AuthorController {
     }
 
 
-    @GetMapping
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Object> getAuthorById(@RequestParam("id") String id){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(authorService.getAuthorById(id));
@@ -55,7 +55,7 @@ public class AuthorController {
         }
     }
 
-    @PostMapping(consumes = "application/json")
+    @PostMapping(value = "admin/add", consumes = "application/json")
     public ResponseEntity<Object> addAuthor(@RequestBody AuthorDTO authorDTO){
         try {
             System.out.println("Adding author: " + authorDTO);
@@ -67,7 +67,7 @@ public class AuthorController {
         }
     }
 
-    @PutMapping(value = "/update", consumes = "application/json")
+    @PutMapping(value = "/admin/update", consumes = "application/json")
     public ResponseEntity<Object> updateAuthor(@RequestBody AuthorDTO author){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(authorService.updateAuthor(author));
@@ -78,7 +78,7 @@ public class AuthorController {
         }
     }
 
-    @PutMapping
+    @PutMapping(value = "/admin/update_auhhors")
     public ResponseEntity<Object> updateAuthors(List<AuthorDTO> authors){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(authorService.updateAuthors(authors));
@@ -89,19 +89,21 @@ public class AuthorController {
         }
     }
 
-    public ResponseEntity<Object> deleteAuthor(Long id){
+    @DeleteMapping("admin/{id}")
+    public ResponseEntity<Object> deleteAuthor(@PathVariable("id") String id){
         try {
+            authorService.deleteAuthor(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(id);
-
-        }catch (BadRequestException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }catch (ResourceNotFoundException e){
+        }
+        catch (ResourceNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
-    public ResponseEntity<Object> deleteAuthors(List<Long> ids){
+    @DeleteMapping("admin/delete")
+    public ResponseEntity<Object> deleteAuthors(List<String> ids){
         try {
+            authorService.deleteAuthors(ids);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ids);
 
         }catch (BadRequestException e){

@@ -48,10 +48,4 @@ public class IdGenerator {
             throw new RuntimeException("Error generating hash", e);
         }
     }
-
-    public static void main(String[] args) {
-        List<String> authors = List.of("J.K. Rowling", "John Tiffany", "Jack Thorne");
-        String bookId = generateBookId(authors, "Harry Potter and the Cursed Child", LocalDate.of(2016, 7, 31));
-        System.out.println("Generated Book ID: " + bookId);
-    }
 }

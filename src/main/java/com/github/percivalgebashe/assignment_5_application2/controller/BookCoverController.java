@@ -6,12 +6,16 @@ import com.github.percivalgebashe.assignment_5_application2.exception.BadRequest
 import com.github.percivalgebashe.assignment_5_application2.exception.ConflictException;
 import com.github.percivalgebashe.assignment_5_application2.exception.NoContentFoundException;
 import com.github.percivalgebashe.assignment_5_application2.exception.ResourceNotFoundException;
+import com.github.percivalgebashe.assignment_5_application2.service.BookCoverService;
 import com.github.percivalgebashe.assignment_5_application2.service.impl.BookCoverServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://127.0.0.1:", methods = {
@@ -25,7 +29,7 @@ import java.util.Optional;
 public class BookCoverController {
 
     @Autowired
-    private BookCoverServiceImpl bookCoverService;
+    private BookCoverService bookCoverService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getBookCover(@PathVariable("id") String id) {
@@ -37,6 +41,16 @@ public class BookCoverController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
 
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<BookCoverDTO>> getBookCovers(Pageable pageable) {
+        try {
+            Page<BookCoverDTO> page = bookCoverService.findAll(pageable);
+            return new ResponseEntity<>(page, HttpStatus.OK);
+        }catch (BadRequestException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")
