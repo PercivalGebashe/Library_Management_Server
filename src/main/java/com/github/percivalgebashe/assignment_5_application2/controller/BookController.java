@@ -39,15 +39,26 @@ public class BookController {
             Page<BookDTO> page = bookService.findAll(pageable);
             return new ResponseEntity<>(page, HttpStatus.OK);
         }catch (NoContentFoundException e) {
-            System.out.println("NoContentFoundException");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
-    @GetMapping({"/id"})
-    public ResponseEntity<BookDTO> getBookById(@RequestParam String id) {
+    @GetMapping("/{searchType}/{searchQuery}")
+    public ResponseEntity<BookDTO> getBookById(@PathVariable String searchType, @PathVariable String searchQuery) {
         try {
-            return new ResponseEntity<>(bookService.findById(id), HttpStatus.OK);
+            if (searchType.equals("title")) {
+                return new ResponseEntity<>(bookService.findById(searchQuery), HttpStatus.OK);
+            }
+            if (searchType.equals("id")){
+                return new ResponseEntity<>(bookService.findById(searchQuery), HttpStatus.OK);
+            }
+            if (searchType.equals("isbn")) {
+                return new ResponseEntity<>(bookService.findById(searchQuery), HttpStatus.OK);
+            }
+            if (searchType.equals("genre")) {
+                return new ResponseEntity<>(bookService.findById(searchQuery), HttpStatus.OK);
+            }
+            throw new BadRequestException(String.format("Invalid searchType: %s", searchType));
         }catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

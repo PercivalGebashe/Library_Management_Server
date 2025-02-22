@@ -20,7 +20,7 @@ import java.util.List;
         RequestMethod.DELETE,
 }) // Allow requests from client
 @RestController
-@RequestMapping("/api/v1/author")
+@RequestMapping("/api/v1/authors")
 public class AuthorController {
 
     private final AuthorService authorService;
@@ -32,7 +32,7 @@ public class AuthorController {
 
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Object> getAuthorById(@RequestParam("id") String id){
+    public ResponseEntity<Object> getAuthorById(@PathVariable String id){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(authorService.getAuthorById(id));
         }catch (ResourceNotFoundException e){
@@ -42,7 +42,7 @@ public class AuthorController {
         }
     }
 
-    @GetMapping(value = "/authors", consumes = "application/json")
+    @GetMapping(consumes = "application/json")
     public ResponseEntity<Object> getAllAuthors(List<String> authorIds){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(authorService.getAllAuthorsById(authorIds));

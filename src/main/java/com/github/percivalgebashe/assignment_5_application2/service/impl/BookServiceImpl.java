@@ -20,7 +20,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -42,7 +41,7 @@ public class BookServiceImpl implements BookService {
 
     }
 
-    public BookDTO findById(String id) {
+    public BookDTO  findById(String id) {
         return bookRepository.findById(id).map(DTOMapper::toBookDto)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Book with ID %s not found", id)));
     }
