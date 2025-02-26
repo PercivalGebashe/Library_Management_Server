@@ -34,9 +34,7 @@ public class BookServiceImpl implements BookService {
 
     public Page<BookDTO> findAll(Pageable pageable) {
         Page<Book> page = bookRepository.findAll(pageable);
-        if (page.isEmpty()){
-            throw new NoContentFoundException("No Books Found");
-        }
+
         return page.map(DTOMapper::toBookDto);
 
     }
@@ -44,6 +42,39 @@ public class BookServiceImpl implements BookService {
     public BookDTO  findById(String id) {
         return bookRepository.findById(id).map(DTOMapper::toBookDto)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Book with ID %s not found", id)));
+    }
+
+    @Override
+    public BookDTO findByTitle(String title) {
+        if(null == title || title.isEmpty()){
+            throw new BadRequestException("Title cannot be null or empty");
+        }
+
+        return DTOMapper.toBookDto(bookRepository.findByTitle(title)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Book with title %s not found", title)))
+        );
+    }
+
+    @Override
+    public BookDTO findByIsbn(String isbn) {
+        if(null == isbn || isbn.isEmpty()){
+            throw new BadRequestException("ISBN cannot be null or empty");
+        }
+
+        return DTOMapper.toBookDto(bookRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Book with ISBN %s not found", isbn)))
+        );
+    }
+
+    @Override
+    public BookDTO findByGenre(String genre) {
+        if (null == genre || genre.isEmpty()){
+            throw new BadRequestException("Genre cannot be null or empty");
+        }
+
+        return DTOMapper.toBookDto(bookRepository.findByGenres(genre)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Book with genre %s not found", genre)))
+        );
     }
 
     public Page<BookDTO> findBookByFilter(BookFilterDTO filter, Pageable pageable) {

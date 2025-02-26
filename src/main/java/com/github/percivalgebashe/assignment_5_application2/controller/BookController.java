@@ -35,28 +35,25 @@ public class BookController {
 
     @GetMapping
     public ResponseEntity<Page<BookDTO>> getBooks(Pageable pageable) {
-        try {
-            Page<BookDTO> page = bookService.findAll(pageable);
-            return new ResponseEntity<>(page, HttpStatus.OK);
-        }catch (NoContentFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+
+        Page<BookDTO> page = bookService.findAll(pageable);
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
     @GetMapping("/{searchType}/{searchQuery}")
     public ResponseEntity<BookDTO> getBookById(@PathVariable String searchType, @PathVariable String searchQuery) {
         try {
             if (searchType.equals("title")) {
-                return new ResponseEntity<>(bookService.findById(searchQuery), HttpStatus.OK);
+                return new ResponseEntity<>(bookService.findByTitle(searchQuery), HttpStatus.OK);
             }
             if (searchType.equals("id")){
                 return new ResponseEntity<>(bookService.findById(searchQuery), HttpStatus.OK);
             }
             if (searchType.equals("isbn")) {
-                return new ResponseEntity<>(bookService.findById(searchQuery), HttpStatus.OK);
+                return new ResponseEntity<>(bookService.findByIsbn(searchQuery), HttpStatus.OK);
             }
             if (searchType.equals("genre")) {
-                return new ResponseEntity<>(bookService.findById(searchQuery), HttpStatus.OK);
+                return new ResponseEntity<>(bookService.findByGenre(searchQuery), HttpStatus.OK);
             }
             throw new BadRequestException(String.format("Invalid searchType: %s", searchType));
         }catch (ResourceNotFoundException e) {
@@ -70,7 +67,6 @@ public class BookController {
             Page<BookDTO> page = bookService.findBookByFilter(filter, pageable);
             return new ResponseEntity<>(page, HttpStatus.OK);
         }catch (NoContentFoundException e){
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }

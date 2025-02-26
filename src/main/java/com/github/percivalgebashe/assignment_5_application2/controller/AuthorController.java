@@ -46,8 +46,6 @@ public class AuthorController {
     public ResponseEntity<Object> getAllAuthors(List<String> authorIds){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(authorService.getAllAuthorsById(authorIds));
-        }catch (NoContentFoundException e){
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(e.getMessage());
         }catch (BadRequestException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (ResourceNotFoundException e){

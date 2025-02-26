@@ -16,6 +16,12 @@ public interface BookService {
 
     BookDTO findById(String id);
 
+    BookDTO findByTitle(String title);
+
+    BookDTO findByIsbn(String isbn);
+
+    BookDTO findByGenre(String genre);
+
     Page<BookDTO> findBookByFilter(BookFilterDTO filter, Pageable pageable);
 
     Book save(BookDTO book);
