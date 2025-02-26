@@ -25,4 +25,6 @@ public interface BookService {
     BookDTO updateBook(BookDTO bookDTO);
 
     List<BookDTO> updateBooks(List<BookDTO> bookDTOs);
+
+    void deleteBook(String id);
 }

@@ -1,5 +1,6 @@
 package com.github.percivalgebashe.assignment_5_application2.entity;
 
+import com.github.percivalgebashe.assignment_5_application2.util.IdGenerator;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,6 @@ import java.util.List;
 public class Author implements Serializable {
 
     @Id
-    @Column(nullable = false, unique = true, length = 100)
     private String authorId;
 
     @Column(nullable = false)
@@ -46,6 +46,6 @@ public class Author implements Serializable {
     }
 
     public void generateAuthorId() {
-        this.authorId = name.replaceAll("\\s+", "") + "_" + birthDate.getYear();
+        this.authorId = IdGenerator.generateAuthorId(name, birthDate);
     }
 }

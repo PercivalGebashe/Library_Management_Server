@@ -104,4 +104,15 @@ public class BookController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @DeleteMapping
+    public ResponseEntity<Object> deleteBook(@RequestParam("bookId") String bookId) {
+        try {
+            System.out.println("delete bookDTO: " + bookId);
+            bookService.deleteBook(bookId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (NoContentFoundException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 }

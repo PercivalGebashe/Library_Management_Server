@@ -119,6 +119,19 @@ public class BookServiceImpl implements BookService {
         return DTOMapper.toBookDtoList(bookRepository.saveAll(books));
     }
 
+    @Override
+    public void deleteBook(String id) {
+        try {
+            if (bookRepository.existsById(id)) {
+                bookRepository.deleteById(id);
+                return;
+            }
+            throw new ResourceNotFoundException(String.format("Book with ID %s not found", id));
+        }catch (NullPointerException e){
+            throw new NullPointerException("Book ID cannot be null");
+        }
+    }
+
     private void validateBookDTO(BookDTO bookDTO) {
         if (bookDTO.getId() == null) {
             throw new BadRequestException("Book id cannot be empty.");
