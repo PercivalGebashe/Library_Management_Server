@@ -28,17 +28,19 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author getAuthorById(String id) {
+    public AuthorDTO getAuthorById(String id) {
         if(null == id || id.isEmpty()){
             throw new BadRequestException("Id cannot be null or empty");
         }
-        return authorRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Author with ID %s not found", id)));
+        return DTOMapper.toAuthorDto(authorRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Author with ID %s not found", id))));
     }
 
     @Override
-    public List<Author> getAllAuthors() {
-        return authorRepository.findAll();
+    public List<AuthorDTO> getAllAuthors() {
+        return authorRepository.findAll().stream()
+                .map(DTOMapper::toAuthorDto)
+                .toList();
     }
 
     @Override

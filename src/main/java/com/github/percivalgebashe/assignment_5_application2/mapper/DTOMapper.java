@@ -15,7 +15,7 @@ public class DTOMapper {
     public static BookDTO toBookDto(Book book) {
         return BookDTO.builder()
                 .id(book.getBookId())
-                .authors(book.getAuthors().stream().map(DTOMapper::toAuthorDto).collect(Collectors.toList()))
+                .authors(book.getAuthors())
                 .title(book.getTitle())
                 .publishers(book.getPublishers())
                 .publishedDate(book.getPublishedDate())
@@ -32,7 +32,7 @@ public class DTOMapper {
     public static Book toBookEntity(BookDTO bookDto) {
         Book book = new Book();
         book.setBookId(bookDto.getId());
-        book.setAuthors(bookDto.getAuthors().stream().map(DTOMapper::toAuthorEntity).collect(Collectors.toList()));
+        book.setAuthors(bookDto.getAuthors());
         book.setTitle(bookDto.getTitle());
         book.setPublishers(bookDto.getPublishers());
         book.setPublishedDate(bookDto.getPublishedDate());

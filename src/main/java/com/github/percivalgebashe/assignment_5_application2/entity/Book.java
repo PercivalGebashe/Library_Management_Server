@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,8 +27,8 @@ public class Book implements Serializable {
     @Column(nullable = false, unique = true, length = 100)
     private String bookId;
 
-    @ManyToMany(mappedBy = "books")
-    private List<Author> authors;
+    @Column(nullable = false)
+    String authors;
 
     @Column(nullable = false)
     private String title;
@@ -57,7 +58,7 @@ public class Book implements Serializable {
     public void generateBookId() {
         if (authors != null && !authors.isEmpty()) {
 
-            this.bookId = IdGenerator.generateBookId(authors.stream().map(Author::getName).toList()
+            this.bookId = IdGenerator.generateBookId(Arrays.stream(authors.split(",")).toList()
                     ,title, publishedDate);
         }
     }

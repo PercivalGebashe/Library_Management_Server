@@ -11,7 +11,7 @@ public interface AuthorService {
 
     Author getAuthorById(String id);
 
-    List<Author> getAllAuthors();
+    List<AuthorDTO> getAllAuthors();
 
     Author addAuthor(AuthorDTO authorDTO);
 

@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -212,7 +213,7 @@ public class BookServiceImpl implements BookService {
         bookToUpdate.setTitle(bookDTO.getTitle());
         bookToUpdate.setIsbn(bookDTO.getIsbn());
         bookToUpdate.setPublishedDate(bookDTO.getPublishedDate());
-        bookToUpdate.setAuthors(bookDTO.getAuthors().stream().map(DTOMapper::toAuthorEntity).toList());
+        bookToUpdate.setAuthors(bookDTO.getAuthors());
         bookToUpdate.setGenres(bookDTO.getGenres());
         bookToUpdate.setDescription(bookDTO.getDescription());
     }

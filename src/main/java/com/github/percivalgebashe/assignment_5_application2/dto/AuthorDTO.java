@@ -15,7 +15,6 @@ public class AuthorDTO {
     private String name;
     private LocalDate birthDate;
     private String biography;
-    private List<BookDTO> books;
 
     public void generateAuthorId() {
         id = IdGenerator.generateAuthorId(name, birthDate);

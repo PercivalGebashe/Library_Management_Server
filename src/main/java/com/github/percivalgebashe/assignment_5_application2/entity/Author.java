@@ -31,13 +31,6 @@ public class Author implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String biography;
 
-    @ManyToMany
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "author_id", referencedColumnName = "authorId"),
-            inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "bookId")
-    )
-    private List<Book> books;
-
     @PrePersist
     private void generateId() {
         if(authorId == null) {
