@@ -43,10 +43,12 @@ public class AuthorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Object>> getAllAuthors(){
+    public ResponseEntity<Object> getAllAuthors(){
         try{
-            return ResponseEntity.status(HttpStatus.OK).body(authorService.getAllAuthors())
-        }catch ()
+            return ResponseEntity.status(HttpStatus.OK).body(authorService.getAllAuthors());
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping(value = "/authors", consumes = "application/json")

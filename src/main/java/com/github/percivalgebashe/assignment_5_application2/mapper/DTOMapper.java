@@ -61,6 +61,11 @@ public class DTOMapper {
         Author author = new Author();
         author.setAuthorId(authorDto.getId());
         author.setName(authorDto.getName());
+        author.setBirthDate(authorDto.getBirthDate());
+        if (null != authorDto.getBiography() && !authorDto.getBiography().isEmpty()) {
+            author.setBiography(authorDto.getBiography());
+        }
+        System.out.println("Author Entity: " + author);
         return author;
     }
 
