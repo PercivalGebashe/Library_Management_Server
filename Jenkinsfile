@@ -15,13 +15,13 @@ pipeline {
             }
         }
 
-        stage('Cache Maven Dependencies') {
-            steps {
-                cache(path: '$HOME/.m2', key: 'maven-cache') {
-                    bat 'mvn dependency:go-offline --batch-mode'
-                }
-            }
-        }
+//         stage('Cache Maven Dependencies') {
+//             steps {
+//                 cache(path: '$HOME/.m2', key: 'maven-cache') {
+//                     bat 'mvn dependency:go-offline --batch-mode'
+//                 }
+//             }
+//         }
 
         stage('Run Tests') {
             steps {
