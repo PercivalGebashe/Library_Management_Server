@@ -30,7 +30,7 @@ pipeline {
                 }
                 stage('Start Application') {
                     steps {
-                        bat 'java -jar lib/*.jar &'
+                        bat 'java -jar target/*.jar &'
                     }
                 }
                 stage('Wait for Server') {
