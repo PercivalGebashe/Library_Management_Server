@@ -2,34 +2,36 @@ pipeline {
     agent any
 
     environment {
-        GITHUB_REGISTRY = "ghcr.io/your-github-username"
-        IMAGE_NAME = "your-repo-name"
+        GITHUB_TOKEN = credentials('assignment-6-adv-java')  // Using Jenkins credentials
+        GITHUB_USERNAME = 'PercivalGebashe'  // GitHub Username
+        GITHUB_REGISTRY = "ghcr.io/PercivalGebashe"
+        IMAGE_NAME = "Library_Management_Server"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/your-username/your-repo.git'
+                git branch: 'main', url: 'https://github.com/PercivalGebashe/Library_Management_Server'
             }
         }
 
         stage('Cache Maven Dependencies') {
             steps {
-                cache(path: '~/.m2', key: 'maven-cache') {
-                    sh 'mvn dependency:resolve'
+                cache(path: '$HOME/.m2', key: 'maven-cache') {
+                    sh 'mvn dependency:go-offline --batch-mode'
                 }
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'mvn test'  // Runs Rest Assured tests separately
+                sh 'mvn test --batch-mode'  // Runs Rest Assured tests separately
             }
         }
 
         stage('Build JAR') {
             steps {
-                sh 'mvn clean package -DskipTests'  // The JAR will be directly placed in /lib
+                sh 'mvn clean package -DskipTests --batch-mode'  // The JAR will be directly placed in /lib
             }
         }
 
@@ -51,7 +53,7 @@ pipeline {
                     def imageTag = "${GITHUB_REGISTRY}/${IMAGE_NAME}:${version}"
 
                     // Push image to GitHub Container Registry
-                    sh "echo $GITHUB_TOKEN | docker login ghcr.io -u your-username --password-stdin"
+                    sh "echo $GITHUB_TOKEN | docker login ghcr.io -u $GITHUB_USERNAME --password-stdin"
                     sh "docker push ${imageTag}"
                 }
             }
