@@ -23,6 +23,36 @@ pipeline {
 //             }
 //         }
 
+        stage('Build') {
+                    steps {
+                        bat 'mvn clean install -DskipTests'
+                    }
+                }
+                stage('Start Application') {
+                    steps {
+                        bat 'nohup java -jar ./lib/*.jar &'
+                    }
+                }
+                stage('Wait for Server') {
+                    steps {
+                        script {
+                            def maxRetries = 30  // Max attempts
+                            def waitTime = 5  // Seconds per attempt
+                            def url = 'http://localhost:8082/actuator/health'  // Change if necessary
+
+                            for (int i = 0; i < maxRetries; i++) {
+                                def response = sh(script: "curl -s -o /dev/null -w '%{http_code}' ${url}", returnStdout: true).trim()
+                                if (response == '200') {
+                                    echo 'Server is up!'
+                                    break
+                                }
+                                echo "Waiting for server... (${i + 1}/${maxRetries})"
+                                sleep(waitTime)
+                            }
+                        }
+                    }
+                }
+
         stage('Run Tests') {
             steps {
                 bat 'mvn test'  // Runs Rest Assured tests separately
