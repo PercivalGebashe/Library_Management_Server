@@ -18,20 +18,20 @@ pipeline {
         stage('Cache Maven Dependencies') {
             steps {
                 cache(path: '$HOME/.m2', key: 'maven-cache') {
-                    sh 'mvn dependency:go-offline --batch-mode'
+                    bat 'mvn dependency:go-offline --batch-mode'
                 }
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'mvn test --batch-mode'  // Runs Rest Assured tests separately
+                bat 'mvn test --batch-mode'  // Runs Rest Assured tests separately
             }
         }
 
         stage('Build JAR') {
             steps {
-                sh 'mvn clean package -DskipTests --batch-mode'  // The JAR will be directly placed in /lib
+                bat 'mvn clean package -DskipTests --batch-mode'  // The JAR will be directly placed in /lib
             }
         }
 
@@ -41,7 +41,7 @@ pipeline {
                     def version = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
                     def imageTag = "${GITHUB_REGISTRY}/${IMAGE_NAME}:${version}"
 
-                    sh "docker build -t ${imageTag} ."
+                    bat "docker build -t ${imageTag} ."
                 }
             }
         }
@@ -53,8 +53,8 @@ pipeline {
                     def imageTag = "${GITHUB_REGISTRY}/${IMAGE_NAME}:${version}"
 
                     // Push image to GitHub Container Registry
-                    sh "echo $GITHUB_TOKEN | docker login ghcr.io -u $GITHUB_USERNAME --password-stdin"
-                    sh "docker push ${imageTag}"
+                    bat "echo $GITHUB_TOKEN | docker login ghcr.io -u $GITHUB_USERNAME --password-stdin"
+                    bat "docker push ${imageTag}"
                 }
             }
         }
