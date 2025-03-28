@@ -31,8 +31,8 @@ public class AuthorController {
     }
 
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Object> getAuthorById(@PathVariable String id){
+    @GetMapping(value = "/author")
+    public ResponseEntity<Object> getAuthorById(@RequestParam String id){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(authorService.getAuthorById(id));
         }catch (ResourceNotFoundException e){

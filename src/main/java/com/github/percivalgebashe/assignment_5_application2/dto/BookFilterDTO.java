@@ -14,9 +14,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookFilterDTO {
-    private Set<Author> authors;
-
     private String title;
+
+    private String authors;
 
     private String genres;
 
