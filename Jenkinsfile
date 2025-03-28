@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/PercivalGebashe/Library_Management_Server'
+                git branch: 'main', credentialsId: 'PAT', url: 'https://github.com/PercivalGebashe/Library_Management_Server.git'
             }
         }
 
