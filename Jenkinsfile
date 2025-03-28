@@ -25,7 +25,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                bat 'mvn test --batch-mode'  // Runs Rest Assured tests separately
+                bat 'mvn test'  // Runs Rest Assured tests separately
             }
         }
 
