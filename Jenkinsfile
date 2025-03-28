@@ -30,7 +30,7 @@ pipeline {
                 }
         stage('Start Application') {
             steps {
-                bat 'java -jar ./lib/Assignment_5_application2-0.0.1-SNAPSHOT.jar &'
+                bat 'start /B java -jar target/assignment6-0.0.1-SNAPSHOT.jar'
             }
         }
                 // stage('Wait for Server') {
@@ -55,7 +55,12 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                bat 'mvn test'  // Runs Rest Assured tests separately
+                sh """
+until curl -s http://localhost:8080/actuator/health | grep UP; do
+    sleep 2
+done
+"""
+sh 'mvn test'
             }
         }
 
