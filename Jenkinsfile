@@ -56,7 +56,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 sh """
-until curl -s http://localhost:8080/actuator/health | grep UP; do
+until curl -s http://localhost:8082/actuator/health | grep UP; do
     sleep 2
 done
 """
