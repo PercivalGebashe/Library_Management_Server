@@ -1,5 +1,5 @@
 # Author and Book Management Server
- 
+
 ## 📖 Overview
 This is a Spring Boot-based RESTful API for managing authors, books, and genres. The application provides endpoints to create, retrieve, update, and delete books and authors while ensuring proper validation and exception handling.
 
