@@ -70,7 +70,7 @@ sh 'mvn test'
 
                     // Push image to GitHub Container Registry
                     bat "echo $GITHUB_TOKEN | docker login ghcr.io -u $GITHUB_USERNAME --password-stdin"
-                    bat "docker push ${imageTag}"
+                    bat "docker push ${imageTag.toLowerCase()}"
                 }
             }
         }
